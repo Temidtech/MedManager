@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rootView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="@android:color/white"
+    android:clickable="true">
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/pill_icon"
+        android:id="@+id/imgItem"/>
+
+    <TextView
+        android:id="@+id/tvInterval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvDescription"
+        android:layout_alignStart="@+id/tvDescription"
+        android:layout_below="@+id/tvDescription"
+        android:fontFamily="@font/roboto_black"
+        tools:text="Item test text" />
+
+    <TextView
+        android:id="@+id/tvEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgItem"
+        android:layout_alignLeft="@+id/tvStartDate"
+        android:layout_alignStart="@+id/tvStartDate"
+        android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="@font/roboto_black"
+        tools:text="Item test text" />
+
+    <TextView
+        android:id="@+id/tvStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvItem5"
+        android:layout_alignBottom="@+id/tvItem5"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="@font/roboto_black"
+        tools:text="Item test text" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvItem5"
+        android:layout_alignStart="@+id/tvItem5"
+        android:layout_below="@+id/tvItem5"
+        android:fontFamily="@font/roboto_black"
+        tools:text="Item test text" />
+
+    <TextView
+        android:id="@+id/tvItem5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgItem"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/imgItem"
+        android:layout_toRightOf="@+id/imgItem"
+        android:fontFamily="@font/roboto_black"
+        android:textColor="#000"
+        android:textStyle="bold"
+        tools:text="Item test text" />
+
+
+</RelativeLayout>
