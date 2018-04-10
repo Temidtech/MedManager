@@ -15,6 +15,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
 import com.swiftsynq.medmanager.Model.Medication;
+import com.swiftsynq.medmanager.Utils.ReminderUtilities;
 import com.swiftsynq.medmanager.data.MedmanagerDbHelper;
 
 import java.text.DateFormatSymbols;
@@ -60,8 +61,8 @@ public class MedicationActivity extends AppCompatActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final MedmanagerDbHelper mDbHelper = new MedmanagerDbHelper(getBaseContext());
         final AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
-        mAwesomeValidation.addValidation(this, R.id.edtDrugName, "[a-zA-Z\\s]+", R.string.err_drugname);
-        mAwesomeValidation.addValidation(this, R.id.edtDescription, "[a-zA-Z\\s]+", R.string.err_description);
+        mAwesomeValidation.addValidation(this, R.id.edtDrugName, "[a-zA-Z0-9\\s]+", R.string.err_drugname);
+        mAwesomeValidation.addValidation(this, R.id.edtDescription, "[a-zA-Z0-9\\s]+", R.string.err_description);
         final ElegantNumberButton button = (ElegantNumberButton) findViewById(R.id.btnInterval);
         final Medication medication=new Medication();
 
@@ -88,6 +89,7 @@ public class MedicationActivity extends AppCompatActivity  {
                         Toast.makeText(getBaseContext(),"Successfully added!",Toast.LENGTH_LONG).show();
                         Intent intent=new Intent(MedicationActivity.this,HomeActivity.class);
                         startActivity(intent);
+                        ReminderUtilities.scheduleMedicationReminder(getBaseContext(),medication);
                     }
                     else {
                         Toast.makeText(getBaseContext(),"Ops`! An error occured!",Toast.LENGTH_LONG).show();

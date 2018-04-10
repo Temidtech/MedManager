@@ -1,5 +1,7 @@
 package com.swiftsynq.medmanager.Fragment;
 
+import android.net.Uri;
+import android.os.Binder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,17 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.swiftsynq.medmanager.MedManagerTbOperations;
 import com.swiftsynq.medmanager.Model.Medication;
 import com.swiftsynq.medmanager.R;
+import com.swiftsynq.medmanager.data.MedManagerPreferences;
 import com.swiftsynq.medmanager.data.MedmanagerDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
@@ -34,25 +41,41 @@ public class HomeFragment extends Fragment {
     private MedmanagerDbHelper mDbHelper;
     List<Medication>mMedications;
     List<String> dates;
+    @BindView(R.id.imgEmptylist)
     ImageView imgEmptylist;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerView;
+    @BindView(R.id.lytProfile)
+    LinearLayout lytProfile;
+    @BindView(R.id.tvDisplayName)
+    TextView tvDisplayName;
+    @BindView(R.id.profile_image)
+    ImageView profile_image;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home_fragment, container, false);
-        imgEmptylist=(ImageView)rootView.findViewById(R.id.imgEmptylist);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        ButterKnife.bind(this,rootView); // bind butterknife after
+        Init();
+        return rootView;
+
+    }
+    private void Init()
+    {
         mDbHelper= new MedmanagerDbHelper(getContext());
         mMedications = MedManagerTbOperations.Retrieve(mDbHelper);
         sectionAdapter = new SectionedRecyclerViewAdapter();
-        
+
         if(mMedications.size()>0)
         {
             imgEmptylist.setVisibility(View.GONE);
+            lytProfile.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             dates=new ArrayList<>();
             for(Medication medication : mMedications)
             {
-                dates.add(medication.getStartdate());
+                if(!dates.contains(medication.getStartdate()))
+                    dates.add(medication.getStartdate());
             }
             List<Medication> originalList=null;
             for (String date : dates) {
@@ -67,10 +90,17 @@ public class HomeFragment extends Fragment {
             recyclerView.setAdapter(sectionAdapter);
         }
 
-       else
-           imgEmptylist.setVisibility(View.VISIBLE);
-        return rootView;
-
+        else
+            tvDisplayName.setText(MedManagerPreferences.getUserDetails(getContext()).getDisplayName());
+        Glide
+                .with(getContext())
+                .load(Uri.parse(MedManagerPreferences.getUserDetails(getContext()).getPhotoUrl()))
+                .centerCrop()
+                .placeholder(R.drawable.pill_icon)
+                .into(profile_image);
+           // profile_image.setImageURI(Uri.parse(MedManagerPreferences.getUserDetails(getContext()).getPhotoUrl()));
+        lytProfile.setVisibility(View.VISIBLE);
+        imgEmptylist.setVisibility(View.VISIBLE);
     }
     public static HomeFragment newInstance() {
     HomeFragment fragment=new HomeFragment();
@@ -88,21 +118,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private List<String> getContactsWithLetter(char letter) {
-        List<String> contacts = new ArrayList<>();
 
-        for (String contact : getResources().getStringArray(R.array.names)) {
-            if (contact.charAt(0) == letter) {
-                contacts.add(contact);
-            }
-        }
-
-        return contacts;
-    }
     private List<Medication> getMedicationWithDate(String date) {
         List<Medication> medications = new ArrayList<>();
         for (Medication medication : mMedications) {
-            if (date.equals(medication.getStartdate())) {
+            if (date.contains(medication.getStartdate())) {
                 medications.add(medication);
             }
         }
@@ -144,7 +164,7 @@ public class HomeFragment extends Fragment {
             String interval = list.get(position).getInterval();
             String startdate = list.get(position).getStartdate();
             itemHolder.tvItem5.setText(drugName);
-            itemHolder.tvInterval.setText(interval);
+            itemHolder.tvInterval.setText(interval+"min(s) Interval");
             itemHolder.tvDescription.setText(decsription);
             itemHolder.tvStartDate.setText(startdate);
             itemHolder.tvEndDate.setText(enddate);
@@ -208,4 +228,10 @@ public class HomeFragment extends Fragment {
             tvEndDate=(TextView)view.findViewById(R.id.tvEndDate);
         }
     }
+    @Override
+    public void onDestroy() {
+        mDbHelper.close();
+        super.onDestroy();
+    }
+
 }

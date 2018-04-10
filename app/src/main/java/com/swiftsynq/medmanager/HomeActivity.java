@@ -13,7 +13,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.swiftsynq.medmanager.Fragment.HistoryFragment;
 import com.swiftsynq.medmanager.Fragment.HomeFragment;
+import com.swiftsynq.medmanager.Fragment.ProfileFragment;
+import com.swiftsynq.medmanager.Model.History;
 import com.swiftsynq.medmanager.data.MedManagerPreferences;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
@@ -32,11 +35,11 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     selectedFragment=HomeFragment.newInstance();
                     break;
-                case R.id.navigation_dashboard:
-                    selectedFragment=HomeFragment.newInstance();
+                case R.id.navigation_history:
+                    selectedFragment= HistoryFragment.newInstance();
                     break;
-                case R.id.navigation_notifications:
-                    selectedFragment=HomeFragment.newInstance();
+                case R.id.navigation_profile:
+                    selectedFragment= ProfileFragment.newInstance();
                     break;
             }
             FragmentManager manager = getSupportFragmentManager();
@@ -49,12 +52,12 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toast.makeText(this, MedManagerPreferences.getUserDetails(this).getEmail(),Toast.LENGTH_LONG).show();
+        Toast.makeText(this, MedManagerPreferences.getUserDetails(this).getPhotoUrl(),Toast.LENGTH_LONG).show();
         getSupportActionBar().setTitle(MedManagerPreferences.getUserDetails(this).getDisplayName());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.main_container,HomeFragment.newInstance()).commit();
+        manager.beginTransaction().replace(R.id.main_container, HomeFragment.newInstance()).commit();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
                 MedManagerPreferences.resetUserDetails(getBaseContext());
                 Intent logout = new Intent(this, MainActivity.class);
                 startActivity(logout);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                //overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 return true;
             case R.id.action_search:
                 return true;

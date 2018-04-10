@@ -5,12 +5,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import com.swiftsynq.medmanager.Model.History;
 import com.swiftsynq.medmanager.Model.Medication;
 import com.swiftsynq.medmanager.data.MedManagerContract;
 import com.swiftsynq.medmanager.data.MedmanagerDbHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.swiftsynq.medmanager.data.MedManagerContract.MedManagerEntry.COLUMN_NAME;
+import static com.swiftsynq.medmanager.data.MedManagerContract.MedManagerEntry.KEY_DATE_STRING;
+import static com.swiftsynq.medmanager.data.MedManagerContract.MedManagerEntry.KEY_HOUR;
+import static com.swiftsynq.medmanager.data.MedManagerContract.MedManagerEntry.KEY_MINUTE;
 
 /**
  * Created by popoolaadebimpe on 02/04/2018.
@@ -36,6 +42,43 @@ public class MedManagerTbOperations {
         long newRowId = db.insert(MedManagerContract.MedManagerEntry.TABLE_NAME, null, values);
         return newRowId;
     }
+    public static long insertHistory(History history, MedmanagerDbHelper medmanagerDbHelper){
+
+        // Gets the data repository in write mode
+        SQLiteDatabase db = medmanagerDbHelper.getWritableDatabase();
+
+// Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(KEY_DATE_STRING, history.getDateString());
+        values.put(MedManagerContract.MedManagerEntry.COLUMN_NAME, history.getPillName());
+        values.put(KEY_HOUR, history.getHourTaken());
+        values.put(KEY_MINUTE, history.getMinuteTaken());
+
+// Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(MedManagerContract.MedManagerEntry.HISTORY_TABLE_NAME, null, values);
+        return newRowId;
+    }
+    public static List<History> getHistory(MedmanagerDbHelper medmanagerDbHelper) {
+        List<History> allHistory = new ArrayList<>();
+        String dbHist = "SELECT * FROM " + MedManagerContract.MedManagerEntry.HISTORY_TABLE_NAME;
+
+        SQLiteDatabase db = medmanagerDbHelper.getReadableDatabase();
+        Cursor c = db.rawQuery(dbHist, null);
+
+        if (c.moveToFirst()) {
+            do {
+                History h = new History();
+                h.setPillName(c.getString(c.getColumnIndex(COLUMN_NAME)));
+                h.setDateString(c.getString(c.getColumnIndex(KEY_DATE_STRING)));
+                h.setHourTaken(c.getInt(c.getColumnIndex(KEY_HOUR)));
+                h.setMinuteTaken(c.getInt(c.getColumnIndex(KEY_MINUTE)));
+
+                allHistory.add(h);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return allHistory;
+    }
     public static List<Medication> Retrieve(MedmanagerDbHelper medmanagerDbHelper){
 
         SQLiteDatabase db = medmanagerDbHelper.getReadableDatabase();
@@ -57,7 +100,7 @@ public class MedManagerTbOperations {
 
 // How you want the results sorted in the resulting Cursor
         String sortOrder =
-                MedManagerContract.MedManagerEntry.COLUMN_START_DATE + " DESC";
+                MedManagerContract.MedManagerEntry.COLUMN_START_DATE + " ASC";
 
         Cursor cursor = db.query(
                 MedManagerContract.MedManagerEntry.TABLE_NAME,   // The table to query
@@ -96,6 +139,24 @@ public class MedManagerTbOperations {
 
         return items;
     }
+    public static int Update(MedmanagerDbHelper medmanagerDbHelper,String istaken)
+    {
+        SQLiteDatabase db = medmanagerDbHelper.getWritableDatabase();
 
+// New value for one column
+        ContentValues values = new ContentValues();
+        values.put(MedManagerContract.MedManagerEntry.COLUMN_IS_TAKEN, istaken);
 
+// Which row to update, based on the title
+        String selection = MedManagerContract.MedManagerEntry.COLUMN_NAME + " LIKE ?";
+        String[] selectionArgs = { "" };
+
+        int count = db.update(
+                MedManagerContract.MedManagerEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        return count;
+    }
 }

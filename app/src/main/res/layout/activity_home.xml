@@ -22,7 +22,7 @@
         android:theme="@style/Widget.BottomNavigationView"
         app:itemIconTint="@drawable/bottom_navigation_color_selector"
         app:itemTextColor="@drawable/bottom_navigation_color_selector"
-        app:itemBackground="@color/colorAccent"
+        app:itemBackground="@color/colorPrimaryDark"
         android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
         app:menu="@menu/navigation" />

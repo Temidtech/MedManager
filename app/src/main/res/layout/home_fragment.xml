@@ -10,6 +10,39 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/lytProfile"
+        android:layout_width="match_parent" android:orientation="vertical"
+        android:layout_height="200dp" android:background="@color/colorAccent">
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_black"
+            android:text="Welcome"
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            android:typeface="sans" />
+        <ImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/background"
+           />
+        <TextView
+            android:id="@+id/tvDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_black"
+
+            android:textAlignment="center"
+            android:textColor="#fff"
+            android:textSize="36sp"
+            android:typeface="sans" />
+    </LinearLayout>
 <ImageView
     android:id="@+id/imgEmptylist"
     android:layout_width="match_parent"
