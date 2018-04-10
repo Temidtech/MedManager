@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent=new Intent(MainActivity.this,HomeActivity.class);
             startActivity(intent);
         } catch (ApiException e) {
+            Toast.makeText(getBaseContext(),"Ops! An error occured.Pls try again!",Toast.LENGTH_LONG).show();
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
