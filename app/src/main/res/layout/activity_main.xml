@@ -34,7 +34,7 @@
         android:drawableLeft="@drawable/gplus"
         android:fontFamily="@font/roboto_black"
         android:paddingLeft="20dp"
-        android:text="Continue with Google"
+        android:text="@string/btn_signin"
         android:textColor="#fff"
         android:textSize="18sp"
         android:textStyle="bold"

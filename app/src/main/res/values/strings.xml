@@ -28,4 +28,5 @@
     <string name="medication_reminder_notification_title">Medication Alert</string>
     <string name="medication_reminder_notification_body">Have you taken your pill already?</string>
     <string name="profile_success">Profile Update Successful!</string>
+    <string name="btn_signin">Continue with Google</string>
 </resources>
