@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.swiftsynq.medmanager.R;
+import com.swiftsynq.medmanager.Utils.CircleTransform;
 import com.swiftsynq.medmanager.data.MedManagerContract;
 import com.swiftsynq.medmanager.data.MedManagerPreferences;
 
@@ -56,7 +57,7 @@ public class ProfileFragment extends Fragment {
         Glide
                 .with(getActivity())
                 .load(Uri.parse(MedManagerPreferences.getUserDetails(getContext()).getPhotoUrl()))
-                .centerCrop()
+                .transform(new CircleTransform(getContext()))
                 .placeholder(R.drawable.pill_icon)
                 .into(profile_image);
         Log.d("photo",MedManagerPreferences.getUserDetails(getContext()).getPhotoUrl());

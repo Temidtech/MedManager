@@ -5,10 +5,16 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.swiftsynq.medmanager.MedManagerTbOperations;
 import com.swiftsynq.medmanager.Model.Medication;
 import com.swiftsynq.medmanager.R;
+import com.swiftsynq.medmanager.Utils.CircleTransform;
 import com.swiftsynq.medmanager.data.MedManagerPreferences;
 import com.swiftsynq.medmanager.data.MedmanagerDbHelper;
 
@@ -28,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
@@ -36,7 +44,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
  * Created by popoolaadebimpe on 31/03/2018.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener{
     private SectionedRecyclerViewAdapter sectionAdapter;
     private MedmanagerDbHelper mDbHelper;
     List<Medication>mMedications;
@@ -95,7 +103,7 @@ public class HomeFragment extends Fragment {
         Glide
                 .with(getContext())
                 .load(Uri.parse(MedManagerPreferences.getUserDetails(getContext()).getPhotoUrl()))
-                .centerCrop()
+                .transform(new CircleTransform(getContext()))
                 .placeholder(R.drawable.pill_icon)
                 .into(profile_image);
            // profile_image.setImageURI(Uri.parse(MedManagerPreferences.getUserDetails(getContext()).getPhotoUrl()));
@@ -129,11 +137,37 @@ public class HomeFragment extends Fragment {
 
         return medications;
     }
-    private class ContactsSection extends StatelessSection {
+    @Override
+    public boolean onQueryTextChange(String query) {
+
+        for (Section section : sectionAdapter.getCopyOfSectionsMap().values()) {
+            if (section instanceof FilterableSection) {
+                ((FilterableSection) section).filter(query);
+            }
+        }
+        sectionAdapter.notifyDataSetChanged();
+
+        return true;
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.actionable_menu, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+    }
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+
+    private class ContactsSection extends StatelessSection implements FilterableSection {
 
         String title;
         List<Medication> list;
-
+        List<Medication> filteredList;
         ContactsSection(String title, List<Medication> list) {
             super(SectionParameters.builder()
                     .itemResourceId(R.layout.custom_medication)
@@ -142,6 +176,7 @@ public class HomeFragment extends Fragment {
 
             this.title = title;
             this.list = list;
+            this.filteredList = new ArrayList<>(list);
         }
 
         @Override
@@ -171,7 +206,7 @@ public class HomeFragment extends Fragment {
             itemHolder.imgItem.setImageResource(R.drawable.pill_icon);
             //itemHolder.imgItem.setImageResource(name.hashCode() % 2 == 0 ? R.drawable.pill_icon : R.drawable.ic_tag_faces_black_48dp);
 
-            itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
+            /*itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getContext(),
@@ -180,7 +215,7 @@ public class HomeFragment extends Fragment {
                                     title),
                             Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
         }
 
         @Override
@@ -193,6 +228,23 @@ public class HomeFragment extends Fragment {
             HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
 
             headerHolder.tvTitle.setText(title);
+        }
+
+        @Override
+        public void filter(String query) {
+            if (TextUtils.isEmpty(query)) {
+                filteredList = new ArrayList<>(list);
+                this.setVisible(true);
+            } else {
+                list.clear();
+                for (Medication value : list) {
+                    if (value.getDrugName().toLowerCase().contains(query.toLowerCase())) {
+                        filteredList.add(value);
+                    }
+                }
+
+                this.setVisible(!filteredList.isEmpty());
+            }
         }
     }
 
@@ -233,5 +285,7 @@ public class HomeFragment extends Fragment {
         mDbHelper.close();
         super.onDestroy();
     }
-
+    interface FilterableSection {
+        void filter(String query);
+    }
 }

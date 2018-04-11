@@ -63,8 +63,6 @@ public class ReminderUtilities {
 
                 .setTag(medication.getDrugName())
 
-                .setConstraints(Constraint.DEVICE_CHARGING)
-
                 .setLifetime(Lifetime.FOREVER)
 
                 .setRecurring(true)

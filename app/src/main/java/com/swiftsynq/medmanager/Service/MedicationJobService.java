@@ -24,7 +24,6 @@ public class MedicationJobService extends JobService {
 
         mBackgroundTask = new AsyncTask() {
 
-            // COMPLETED (6) Override doInBackground
             @Override
             protected Object doInBackground(Object[] params) {
                 Context context = MedicationJobService.this;

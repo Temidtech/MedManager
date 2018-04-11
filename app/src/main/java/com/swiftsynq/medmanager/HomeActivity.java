@@ -21,7 +21,7 @@ import com.swiftsynq.medmanager.data.MedManagerPreferences;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity  {
 
     private TextView mTextMessage;
 
@@ -52,7 +52,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toast.makeText(this, MedManagerPreferences.getUserDetails(this).getPhotoUrl(),Toast.LENGTH_LONG).show();
         getSupportActionBar().setTitle(MedManagerPreferences.getUserDetails(this).getDisplayName());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

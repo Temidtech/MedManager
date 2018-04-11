@@ -10,6 +10,7 @@
         app:showAsAction="always" />
     <item android:id="@+id/action_search"
         android:title="@string/search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@drawable/search"
         app:showAsAction="always" />
     <item android:id="@+id/action_logout"
