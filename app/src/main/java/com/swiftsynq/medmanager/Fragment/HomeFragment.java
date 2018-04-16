@@ -181,7 +181,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
         @Override
         public int getContentItemsTotal() {
-            return list.size();
+            return filteredList.size();
         }
 
         @Override
@@ -193,11 +193,11 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
             final ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
-            String drugName = list.get(position).getDrugName();
-            String decsription = list.get(position).getDecsription();
-            String enddate = list.get(position).getEnddate();
-            String interval = list.get(position).getInterval();
-            String startdate = list.get(position).getStartdate();
+            String drugName = filteredList.get(position).getDrugName();
+            String decsription = filteredList.get(position).getDecsription();
+            String enddate = filteredList.get(position).getEnddate();
+            String interval = filteredList.get(position).getInterval();
+            String startdate = filteredList.get(position).getStartdate();
             itemHolder.tvItem5.setText(drugName);
             itemHolder.tvInterval.setText(interval+"min(s) Interval");
             itemHolder.tvDescription.setText(decsription);
@@ -236,7 +236,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                 filteredList = new ArrayList<>(list);
                 this.setVisible(true);
             } else {
-                list.clear();
+                filteredList.clear();
                 for (Medication value : list) {
                     if (value.getDrugName().toLowerCase().contains(query.toLowerCase())) {
                         filteredList.add(value);

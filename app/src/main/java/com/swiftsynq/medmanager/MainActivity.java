@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
             GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-           // updateUI(account);
             if (acct != null) {
                 String personName = acct.getDisplayName();
                 String personGivenName = acct.getGivenName();

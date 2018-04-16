@@ -146,7 +146,7 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
 
         String title;
         List<History> list;
-
+        List<History> filteredList;
         HistorySection(String title, List<History> list) {
             super(SectionParameters.builder()
                     .itemResourceId(R.layout.custom_history)
@@ -155,11 +155,12 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
 
             this.title = title;
             this.list = list;
+            this.filteredList = new ArrayList<>(list);
         }
 
         @Override
         public int getContentItemsTotal() {
-            return list.size();
+            return filteredList.size();
         }
 
         @Override
@@ -171,10 +172,10 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
         public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
             final ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
-            String drugName = list.get(position).getPillName();
-            String datetaken = list.get(position).getDateString();
-            String hour = String.valueOf(list.get(position).getHourTaken());
-            String min = String.valueOf(list.get(position).getMinuteTaken());
+            String drugName = filteredList.get(position).getPillName();
+            String datetaken = filteredList.get(position).getDateString();
+            String hour = String.valueOf(filteredList.get(position).getHourTaken());
+            String min = String.valueOf(filteredList.get(position).getMinuteTaken());
             itemHolder.tvMedication.setText(drugName);
             itemHolder.tvDate.setText(datetaken);
             itemHolder.tvTime.setText(hour+":"+min);
@@ -207,17 +208,17 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
         @Override
         public void filter(String query) {
             if (TextUtils.isEmpty(query)) {
-                list = new ArrayList<>(list);
+                filteredList = new ArrayList<>(list);
                 this.setVisible(true);
             } else {
-                list.clear();
+                filteredList.clear();
                 for (History value : list) {
                     if (value.getPillName().contains(query.toLowerCase())) {
-                        list.add(value);
+                        filteredList.add(value);
                     }
                 }
 
-                this.setVisible(!list.isEmpty());
+                this.setVisible(!filteredList.isEmpty());
             }
         }
     }
