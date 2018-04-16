@@ -199,7 +199,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             String interval = filteredList.get(position).getInterval();
             String startdate = filteredList.get(position).getStartdate();
             itemHolder.tvItem5.setText(drugName);
-            itemHolder.tvInterval.setText(interval+"min(s) Interval");
+            itemHolder.tvInterval.setText(interval+"time(s)");
             itemHolder.tvDescription.setText(decsription);
             itemHolder.tvStartDate.setText(startdate);
             itemHolder.tvEndDate.setText(enddate);

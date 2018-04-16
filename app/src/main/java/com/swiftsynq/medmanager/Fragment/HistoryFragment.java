@@ -182,16 +182,7 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
             itemHolder.imgItem.setImageResource(R.drawable.pill_icon);
             //itemHolder.imgItem.setImageResource(name.hashCode() % 2 == 0 ? R.drawable.pill_icon : R.drawable.ic_tag_faces_black_48dp);
 
-            itemHolder.rootView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(),
-                            String.format("Clicked on position #%s of Section %s",
-                                    sectionAdapter.getPositionInSection(itemHolder.getAdapterPosition()),
-                                    title),
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
+
         }
 
         @Override
