@@ -25,12 +25,10 @@ When Dashbopard is empty:
 
 ### Medication [Add Medication] 
 The User is required to add Medication, using the Add Medication icon on the Home Dashboard. This is how the process looks like :
-
 <img src="https://github.com/Temidtech/MedManager/blob/master/screenshots/Screenshot_1523891696.png" width="280"/>
 ### Medication List and History
 User can see a list of all medications sorted by month.
-<img src="https://github.com/Temidtech/MedManager/blob/master/screenshots/Screenshot_1523437652.png" width="280"/> 
-<img src="https://github.com/Temidtech/MedManager/blob/master/screenshots/Screenshot_1523893464.png" width="280"/> 
+<img src="https://github.com/Temidtech/MedManager/blob/master/screenshots/Screenshot_1523437652.png" width="280"/> <img src="https://github.com/Temidtech/MedManager/blob/master/screenshots/Screenshot_1523893464.png" width="280"/> 
 
 ### Medication [Medication Alert] 
 The User receives alert on device at specified time!
