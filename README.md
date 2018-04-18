@@ -4,6 +4,7 @@ Med-Manager is a simple app that helps patients remember  to take their medicati
 ## Quick Set Up
 * Clone the Repository from Github
 * Open the project folder using Android Studio IDE
+* To download apk use this link https://github.com/Temidtech/MedManager/tree/master/apk
 
 ### Login>Update Profile Page
 The User will the be presented with the Login Page, where they are required to authenticate themselves using Google Login
