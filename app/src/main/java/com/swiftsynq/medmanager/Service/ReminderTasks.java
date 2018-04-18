@@ -54,7 +54,7 @@ public class ReminderTasks {
         history.setDateString(context.getString(R.string.calendar_date_picker_result_values, getStringMonthTime(now.getMonth()),now.getDay(),now.getYear()));
         history.setHourTaken(now.getHours());
         history.setMinuteTaken(now.getMinutes());
-        Log.d("History",String.valueOf(MedManagerTbOperations.insertHistory(history,medmanagerDbHelper)));
+        Log.d("History",String.valueOf(MedManagerTbOperations.insertHistory(history)));
 
         NotificationUtils.clearAllNotifications(context);
     }

@@ -46,7 +46,6 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 
 public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener{
     private SectionedRecyclerViewAdapter sectionAdapter;
-    private MedmanagerDbHelper mDbHelper;
     List<Medication>mMedications;
     List<String> dates;
     @BindView(R.id.imgEmptylist)
@@ -70,8 +69,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     }
     private void Init()
     {
-        mDbHelper= new MedmanagerDbHelper(getContext());
-        mMedications = MedManagerTbOperations.Retrieve(mDbHelper);
+        new MedManagerTbOperations(getContext());
+        mMedications = MedManagerTbOperations.Retrieve();
         sectionAdapter = new SectionedRecyclerViewAdapter();
 
         if(mMedications.size()>0)
@@ -282,7 +281,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     }
     @Override
     public void onDestroy() {
-        mDbHelper.close();
+        MedManagerTbOperations.close();
         super.onDestroy();
     }
     interface FilterableSection {

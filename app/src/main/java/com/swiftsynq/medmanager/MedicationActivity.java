@@ -58,6 +58,7 @@ public class MedicationActivity extends AppCompatActivity  {
     private void Init()
     {
         ButterKnife.bind(this); // bind butterknife after
+        new MedManagerTbOperations(getBaseContext());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         final MedmanagerDbHelper mDbHelper = new MedmanagerDbHelper(getBaseContext());
         final AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
@@ -84,7 +85,7 @@ public class MedicationActivity extends AppCompatActivity  {
 
                     medication.setDrugName(edtDrugName.getText().toString());
 
-                    if(MedManagerTbOperations.insert(medication,mDbHelper)>0)
+                    if(MedManagerTbOperations.insert(medication)>0)
                     {
                         Toast.makeText(getBaseContext(),"Successfully added!",Toast.LENGTH_LONG).show();
                         Intent intent=new Intent(MedicationActivity.this,HomeActivity.class);

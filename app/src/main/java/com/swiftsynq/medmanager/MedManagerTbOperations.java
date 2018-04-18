@@ -1,7 +1,9 @@
 package com.swiftsynq.medmanager;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
@@ -23,13 +25,24 @@ import static com.swiftsynq.medmanager.data.MedManagerContract.MedManagerEntry.K
  */
 
 public class MedManagerTbOperations {
-
-
-    public static long insert(Medication medication, MedmanagerDbHelper medmanagerDbHelper){
-
+    static MedmanagerDbHelper medmanagerDbHelper;
+    static SQLiteDatabase db;
+    public MedManagerTbOperations(Context context){
         // Gets the data repository in write mode
-        SQLiteDatabase db = medmanagerDbHelper.getWritableDatabase();
+        medmanagerDbHelper = new MedmanagerDbHelper(context);
+    }
+    public static void openwritable() throws SQLException {
+        db = medmanagerDbHelper.getWritableDatabase();
+    }
+    public static void openreadable() throws SQLException {
+        db = medmanagerDbHelper.getReadableDatabase();
+    }
+    public static void close() {
+        medmanagerDbHelper.close();
+    }
+    public static long insert(Medication medication){
 
+        openwritable();
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(MedManagerContract.MedManagerEntry.COLUMN_DESCRIPTION, medication.getDecsription());
@@ -42,10 +55,9 @@ public class MedManagerTbOperations {
         long newRowId = db.insert(MedManagerContract.MedManagerEntry.TABLE_NAME, null, values);
         return newRowId;
     }
-    public static long insertHistory(History history, MedmanagerDbHelper medmanagerDbHelper){
+    public static long insertHistory(History history){
 
-        // Gets the data repository in write mode
-        SQLiteDatabase db = medmanagerDbHelper.getWritableDatabase();
+        openwritable();
 
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -58,11 +70,10 @@ public class MedManagerTbOperations {
         long newRowId = db.insert(MedManagerContract.MedManagerEntry.HISTORY_TABLE_NAME, null, values);
         return newRowId;
     }
-    public static List<History> getHistory(MedmanagerDbHelper medmanagerDbHelper) {
+    public static List<History> getHistory() {
         List<History> allHistory = new ArrayList<>();
         String dbHist = "SELECT * FROM " + MedManagerContract.MedManagerEntry.HISTORY_TABLE_NAME;
-
-        SQLiteDatabase db = medmanagerDbHelper.getReadableDatabase();
+        openreadable();
         Cursor c = db.rawQuery(dbHist, null);
 
         if (c.moveToFirst()) {
@@ -79,10 +90,9 @@ public class MedManagerTbOperations {
         c.close();
         return allHistory;
     }
-    public static List<Medication> Retrieve(MedmanagerDbHelper medmanagerDbHelper){
+    public static List<Medication> Retrieve(){
 
-        SQLiteDatabase db = medmanagerDbHelper.getReadableDatabase();
-
+        openreadable();
 // Define a projection that specifies which columns from the database
 // you will actually use after this query.
         String[] projection = {
@@ -139,9 +149,9 @@ public class MedManagerTbOperations {
 
         return items;
     }
-    public static int Update(MedmanagerDbHelper medmanagerDbHelper,String istaken)
+    public static int Update(String istaken)
     {
-        SQLiteDatabase db = medmanagerDbHelper.getWritableDatabase();
+        openwritable();
 
 // New value for one column
         ContentValues values = new ContentValues();

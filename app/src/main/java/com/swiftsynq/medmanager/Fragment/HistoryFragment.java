@@ -41,7 +41,6 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 
 public class HistoryFragment extends Fragment implements SearchView.OnQueryTextListener {
     private SectionedRecyclerViewAdapter sectionAdapter;
-    private MedmanagerDbHelper mDbHelper;
     List<History>historyList;
     List<String> dates;
     @BindView(R.id.imgEmptylistHis)
@@ -52,6 +51,7 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history_fragment, container, false);
+        new MedManagerTbOperations(getContext());
         ButterKnife.bind(this,rootView); // bind butterknife after
         Init();
         return rootView;
@@ -59,8 +59,7 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
     }
     private void Init()
     {
-        mDbHelper= new MedmanagerDbHelper(getContext());
-        historyList = MedManagerTbOperations.getHistory(mDbHelper);
+        historyList = MedManagerTbOperations.getHistory();
         sectionAdapter = new SectionedRecyclerViewAdapter();
 
         if(historyList.size()>0)
@@ -247,7 +246,7 @@ public class HistoryFragment extends Fragment implements SearchView.OnQueryTextL
     }
     @Override
     public void onDestroy() {
-        mDbHelper.close();
+        MedManagerTbOperations.close();
         super.onDestroy();
     }
 
